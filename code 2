@@ -1,0 +1,45 @@
+import random
+import time
+import json
+import base64
+
+def simulate_ultrasonic_sensor():
+    # Simulating ultrasonic sensor data (fill level in percentage)
+    fill_level = random.randint(0, 100)
+    timestamp = time.time()
+    data = {
+        'sensor_type': 'ultrasonic',
+        'fill_level': fill_level,
+        'timestamp': timestamp
+    }
+    return data
+
+def simulate_camera_sensor():
+    # Simulating camera sensor data (image capture)
+    # Generate a placeholder image data
+    image_data = b'Simple placeholder image data'
+    
+    # Convert image data to base64
+    encoded_image = base64.b64encode(image_data).decode('utf-8')
+    
+    timestamp = time.time()
+    data = {
+        'sensor_type': 'camera',
+        'image': encoded_image,
+        'timestamp': timestamp
+    }
+    return data
+
+def main():
+    ultrasonic_data = simulate_ultrasonic_sensor()
+    camera_data = simulate_camera_sensor()
+    
+    # Converting data to JSON format
+    ultrasonic_json = json.dumps(ultrasonic_data, indent=4)
+    camera_json = json.dumps(camera_data, indent=4)
+    
+    print("Ultrasonic Sensor Data in JSON Format:\n", ultrasonic_json)
+    print("\nCamera Sensor Data in JSON Format:\n", camera_json)
+
+if __name__ == "__main__":
+    main()
