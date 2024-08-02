@@ -1,0 +1,49 @@
+import heapq
+
+def heuristic(node, goal):
+    # Example heuristic function (Manhattan distance for grid-based graph)
+    return abs(ord(goal) - ord(node))
+
+def a_star(graph, start, goal):
+    queue = [(0, start)]
+    g_costs = {node: float('infinity') for node in graph}
+    g_costs[start] = 0
+    f_costs = {node: float('infinity') for node in graph}
+    f_costs[start] = heuristic(start, goal)
+    previous_nodes = {node: None for node in graph}
+
+    while queue:
+        _, current_node = heapq.heappop(queue)
+
+        if current_node == goal:
+            break
+
+        for neighbor, weight in graph[current_node].items():
+            tentative_g_cost = g_costs[current_node] + weight
+
+            if tentative_g_cost < g_costs[neighbor]:
+                g_costs[neighbor] = tentative_g_cost
+                f_costs[neighbor] = tentative_g_cost + heuristic(neighbor, goal)
+                heapq.heappush(queue, (f_costs[neighbor], neighbor))
+                previous_nodes[neighbor] = current_node
+
+    path, current_node = [], goal
+    while previous_nodes[current_node] is not None:
+        path.append(current_node)
+        current_node = previous_nodes[current_node]
+    path.append(start)
+    path.reverse()
+    
+    return path, g_costs[goal]
+
+# Example usage
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'A': 1, 'C': 2, 'D': 5},
+    'C': {'A': 4, 'B': 2, 'D': 1},
+    'D': {'B': 5, 'C': 1}
+}
+start_node = 'A'
+goal_node = 'D'
+path, distance = a_star(graph, start_node, goal_node)
+print(f"Path: {path}, Distance: {distance}")
